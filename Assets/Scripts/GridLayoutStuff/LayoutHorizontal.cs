@@ -7,6 +7,7 @@ public class LayoutHorizontal : MonoBehaviour
     [SerializeField] HorizontalLayoutData horizontalLayoutData;
     [SerializeField] Transform parentForCards;
     [SerializeField] Card cardPrefab;
+    public List<Card> InsCards => insCards;
     List<Card> insCards = new List<Card>();
     int heightInGrid = -1;
     

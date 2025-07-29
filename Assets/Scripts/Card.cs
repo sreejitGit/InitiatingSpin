@@ -6,8 +6,12 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     [SerializeField] bool allowClick = false;
+    [SerializeField] bool isSolved = false;
+    public bool IsSolved => isSolved;
+
     [Header("Card data")]
     [SerializeField] CardData myCardData;
+    public Sprite CardSprite => myCardData.sprite;
 
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] Transform contentAreaTransform;
@@ -29,29 +33,45 @@ public class Card : MonoBehaviour
         transform.name = transform.name + " " + myCardData.name;
     }
 
+    public void ToggleAllowClick(bool target)
+    {
+        allowClick = target;
+    }
+
     public void InitUI()
     {
         cardContentImage.sprite = myCardData.sprite;
         RescaleUI();
+    }
+
+    void OnRescaleDone()
+    {
         Hide(0f);
-        StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, 0.5f));
+        StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, 0.25f));
     }
 
     void RescaleUI()
     {
-        foreach (var x in targetRectsToScaleToFit)
+        for (int i = 0; i < targetRectsToScaleToFit.Count; i++)
         {
-            Utils.Rescale(parentToFitTo, x);
+            if (i == targetRectsToScaleToFit.Count - 1)
+            {
+                Utils.Rescale(parentToFitTo, targetRectsToScaleToFit[i], OnRescaleDone);
+            }
+            else
+            {
+                Utils.Rescale(parentToFitTo, targetRectsToScaleToFit[i]);
+            }
         }
     }
 
-    void Show(float duration = 0.5f)
+    public void Show(float duration = 0.5f)
     {
         StopFlippingAnim();
         StartCoroutine(flippingAnim = FlipToShowRoutine(duration));
     }
 
-    void Hide(float duration)
+    public void Hide(float duration)
     {
         StopFlippingAnim();
         StartCoroutine(flippingAnim = FlipToHideRoutine(duration));
@@ -67,24 +87,32 @@ public class Card : MonoBehaviour
 
     public void ClickedOnShown()
     {
+        if (isSolved)
+        {
+            return;
+        }
         if (allowClick)
         {
-            Hide(0.5f);
+            GameEvents.PlayerClickedShownCard(this);
         }
     }
 
     public void ClickedOnHidden()
     {
+        if (isSolved)
+        {
+            return;
+        }
         if (allowClick)
         {
-            Show();
+            GameEvents.PlayerClickedHiddenCard(this);
         }
     }
 
     IEnumerator flippingAnim;
     private IEnumerator FlipToShowRoutine(float duration)
     {
-        allowClick = false;
+        ToggleAllowClick(false);
         float halfTime = duration / 2f;
 
         hiddenObj.SetActive(true);
@@ -109,12 +137,34 @@ public class Card : MonoBehaviour
         shownObj.transform.rotation = startRotation;
         yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
 
-        allowClick = true;
+        if (hideOnCorrectCardsSequence.Count > 0)
+        {
+            foreach (var x in hideOnCorrectCardsSequence)
+            {
+                x.EscapedTheGrid();
+            }
+            hideOnCorrectCardsSequence.Clear();
+        }
+        else if (hideOnIncorrectCardsSequence.Count > 0)
+        {
+            foreach (var x in hideOnIncorrectCardsSequence)
+            {
+                x.ToggleAllowClick(true);
+                x.Hide(0.3f);
+            }
+            ToggleAllowClick(true);
+            Hide(0.3f);
+            hideOnIncorrectCardsSequence.Clear();
+        }
+        else
+        {
+            GameEvents.CardFlipFinished(this);
+        }
     }
 
     private IEnumerator FlipToHideRoutine(float duration)
     {
-        allowClick = false;
+        ToggleAllowClick(false);
         if (duration <= 0f)
         {
             hiddenObj.SetActive(true);
@@ -139,17 +189,34 @@ public class Card : MonoBehaviour
             hiddenObj.transform.rotation = endRotation;
 
             yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
-            yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation,halfTime);
+            yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
             shownObj.transform.rotation = endRotation;
             shownObj.SetActive(false);
 
             hiddenObj.transform.localScale = shownObj.transform.localScale;
-            yield return Utils.RotateSlerp(hiddenObj.transform, endRotation, startRotation,halfTime);
+            yield return Utils.RotateSlerp(hiddenObj.transform, endRotation, startRotation, halfTime);
             hiddenObj.transform.rotation = startRotation;
             yield return Utils.BounceDownEffect(hiddenObj.transform, Vector2.one);
         }
-        allowClick = true;
+        GameEvents.CardFlipFinished(this);
     }
-    
+
+    public void EscapedTheGrid()
+    {
+        isSolved = true;
+        StartCoroutine(Utils.FadeCanvas(canvasGroup, 1f, 0.5f, 0.25f));
+    }
+
+    List<Card> hideOnIncorrectCardsSequence = new List<Card>();
+    public void HideASAP(List<Card> incorrectCardsSequence)
+    {
+        hideOnIncorrectCardsSequence = incorrectCardsSequence;
+    }
+
+    List<Card> hideOnCorrectCardsSequence = new List<Card>();
+    public void CallEscapedTheGrid(List<Card> correctCardsSequence)
+    {
+        hideOnCorrectCardsSequence = correctCardsSequence;
+    }
 
 }

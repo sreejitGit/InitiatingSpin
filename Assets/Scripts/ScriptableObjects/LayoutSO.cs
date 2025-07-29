@@ -27,6 +27,7 @@ public class LayoutSO : ScriptableObject
 
     [Header("RandomGenerateLayout")]
     [SerializeField][Range(1,4)] int numOfCopiesInGrid = 2;
+    public int NumOfCopiesInGrid => numOfCopiesInGrid;
 
     public const int maxWidth = 7;
     public const int maxHeight = 7;

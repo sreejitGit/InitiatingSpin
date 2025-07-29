@@ -6,22 +6,20 @@ public class LayoutSpawner : MonoBehaviour
 {
     [SerializeField] Transform verticalParentTransform;
     [SerializeField] LayoutHorizontal layoutHorizontalPrefab;
+
+
+    public List<LayoutHorizontal> InsLayoutHorizontals =>insLayoutHorizontals;
     List<LayoutHorizontal> insLayoutHorizontals = new List<LayoutHorizontal>();
-    [SerializeField]  LayoutSO tempLayoutSO;
 
-    void Start()
-    {
-        Spawn();
-    }
 
-    public void Spawn()
-    {
-        StartCoroutine(Spawn(tempLayoutSO));
-    }
-
-    public IEnumerator Spawn(LayoutSO layoutSO)
+    public void SpawnLayout(LayoutSO layoutSO)
     {
         ResetLayout();
+        StartCoroutine(Spawn(layoutSO));
+    }
+
+    IEnumerator Spawn(LayoutSO layoutSO)
+    {
         for (int j = 0; j < layoutSO.layoutData.horizontalLayoutDatas.Count; j++)
         {
             LayoutHorizontal newHori = Instantiate(layoutHorizontalPrefab, verticalParentTransform);
@@ -33,7 +31,10 @@ public class LayoutSpawner : MonoBehaviour
         foreach (var x in insLayoutHorizontals)
         {
             x.InitUI();
+            yield return new WaitForFixedUpdate();
         }
+        yield return new WaitForFixedUpdate();
+        GameEvents.LayoutSetupDone();
     }
 
     void ResetLayout()
@@ -46,5 +47,6 @@ public class LayoutSpawner : MonoBehaviour
             }
         }
         insLayoutHorizontals = new List<LayoutHorizontal>();
+        StopAllCoroutines();
     }
 }
