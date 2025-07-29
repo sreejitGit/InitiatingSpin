@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    [Header("Card data")]
+    [SerializeField] CardData myCardData;
+
     [SerializeField] CanvasGroup canvasGroup;
     [SerializeField] Transform contentAreaTransform;
     [SerializeField] GameObject hiddenObj;
@@ -15,17 +18,42 @@ public class Card : MonoBehaviour
     [SerializeField] RectTransform parentToFitTo;
     [SerializeField] List<RectTransform> targetRectsToScaleToFit;
 
-    public void InitData()
+    public void InitData(CardData cardData)
     {
-    
+        myCardData = cardData;
+        if (myCardData.name == "")
+        {
+            myCardData.name = myCardData.sprite.name;
+        }
+        transform.name = transform.name + " " + myCardData.name;
     }
 
     public void InitUI()
     {
+        cardContentImage.sprite = myCardData.sprite;
+        RescaleUI();
+        Hide();
+        Show();
+    }
+
+    void RescaleUI()
+    {
         foreach (var x in targetRectsToScaleToFit)
         {
-            Utils.Rescale(parentToFitTo,x);
+            Utils.Rescale(parentToFitTo, x);
         }
+    }
 
+    void Show()
+    {
+        canvasGroup.alpha = 1f;
+        hiddenObj.SetActive(false);
+        shownObj.SetActive(true);
+    }
+
+    void Hide()
+    {
+        hiddenObj.SetActive(true);
+        shownObj.SetActive(false);
     }
 }

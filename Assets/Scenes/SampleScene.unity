@@ -509,6 +509,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 954903549}
+  - component: {fileID: 954903550}
   m_Layer: 5
   m_Name: CardsAreaHolder
   m_TagString: Untagged
@@ -537,6 +538,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &954903550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954903548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e7ebc3049f94c2295ac0aa3917f273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalParentTransform: {fileID: 759415560}
+  layoutHorizontalPrefab: {fileID: 1098037634}
+  tempLayoutSO: {fileID: 11400000, guid: 6fe68b54156e2499180ca032bd4d0fd7, type: 2}
 --- !u!1 &1092863867
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,13 +639,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1098037632}
   - component: {fileID: 1098037633}
+  - component: {fileID: 1098037634}
   m_Layer: 5
   m_Name: HorizontalGroupPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1098037632
 RectTransform:
   m_ObjectHideFlags: 0
@@ -646,10 +663,10 @@ RectTransform:
   m_Father: {fileID: 759415560}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 659.5762, y: -540}
+  m_SizeDelta: {x: 1319.1523, y: 1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1098037633
 MonoBehaviour:
@@ -677,6 +694,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1098037634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098037631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7075fb789aaf4e74b63172f24c72a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalLayoutData:
+    cardSOs: []
+  parentForCards: {fileID: 1098037632}
+  cardPrefab: {fileID: 1231716568}
 --- !u!1 &1231716563
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +770,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993b98be6595c443ea843afdf8e39f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myCardData:
+    name: 
+    sprite: {fileID: 0}
   canvasGroup: {fileID: 1231716569}
   contentAreaTransform: {fileID: 247054857}
   hiddenObj: {fileID: 1092863867}
