@@ -192,7 +192,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -700,8 +700,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f2c2815dbe24a3585de8dc699d7d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ongoingGameState:
+    isSolved: 0
+    score: 0
+    cardsState: []
   layoutSpawner: {fileID: 954903550}
-  tempLayoutSO: {fileID: 11400000, guid: 6fe68b54156e2499180ca032bd4d0fd7, type: 2}
+  levelsLayoutSO:
+  - {fileID: 11400000, guid: 6fe68b54156e2499180ca032bd4d0fd7, type: 2}
+  - {fileID: 11400000, guid: 77fc2d492f4db413387a416fc78c9ab2, type: 2}
+  - {fileID: 11400000, guid: 8a9bf49553ab64cb6ad337ce14a577bb, type: 2}
+  clickedSequenceOfCards: []
 --- !u!1001 &9026788006684277083
 PrefabInstance:
   m_ObjectHideFlags: 0

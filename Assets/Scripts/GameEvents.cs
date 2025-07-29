@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameEvents
 {
 
+    public static event System.Action OnCheckForLevelCompletion;
     public static event System.Action OnLayoutReady;
     public static event System.Action<Card> OnPlayerClickedShownCard;
     public static event System.Action<Card> OnPlayerClickedHiddenCard;
@@ -12,10 +13,16 @@ public class GameEvents
 
     public static void ClearEvents()
     {
+        OnCheckForLevelCompletion = null;
         OnLayoutReady = null;
         OnPlayerClickedShownCard = null;
         OnPlayerClickedHiddenCard = null;
         OnCardFlipFinished = null;
+    }
+
+    public static void CheckForLevelCompletion()
+    {
+        OnCheckForLevelCompletion?.Invoke();
     }
 
     public static void LayoutSetupDone()

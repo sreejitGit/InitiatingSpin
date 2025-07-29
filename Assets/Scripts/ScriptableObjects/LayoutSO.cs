@@ -17,6 +17,7 @@ public class HorizontalLayoutData
 [CreateAssetMenu(fileName = "LayoutSO", menuName = "ScriptableObjects/LayoutSO", order = 1)]
 public class LayoutSO : ScriptableObject
 {
+    public string layoutID = "";
     /// <summary>
     /// list of card data SOs that will be used as refCardDataSOs during random grid layout generation
     /// </summary>
@@ -26,18 +27,30 @@ public class LayoutSO : ScriptableObject
     public LayoutData layoutData;
 
     [Header("RandomGenerateLayout")]
-    [SerializeField][Range(1,4)] int numOfCopiesInGrid = 2;
+    [SerializeField][Range(2,3)] int numOfCopiesInGrid = 2;
     public int NumOfCopiesInGrid => numOfCopiesInGrid;
 
     public const int maxWidth = 7;
     public const int maxHeight = 7;
     [SerializeField] [Range(2,maxWidth)] int width = 2;
     [SerializeField] [Range(2,maxHeight)] int height = 2;
-    [SerializeField] List<CardDataSO> refCardDataSOs = new List<CardDataSO>();
+    List<CardDataSO> refCardDataSOs = new List<CardDataSO>();
     [SerializeField] List<CardDataSO> gridCardDataSOs = new List<CardDataSO>();
 
+    private void OnValidate()
+    {
+        if (layoutID.Length < 3)
+        {
+            GenerateLayoutID();
+        }
+    }
 
-    public void RandomizeLibraryCardDataSOs()
+    public void GenerateLayoutID()
+    {
+        layoutID = Utils.GenerateRandomString(20);
+    }
+
+    void RandomizeLibraryCardDataSOs()
     {
         refCardDataSOs = new List<CardDataSO>();
         foreach (var x in libraryCardDataSOs)
@@ -52,34 +65,10 @@ public class LayoutSO : ScriptableObject
 
     public void RandomGenerateLayout()
     {
-        float maxElementsInLibrary = (float)(width * height) / numOfCopiesInGrid ;
-        if (refCardDataSOs.Count < maxElementsInLibrary)
-        {
-            RandomizeLibraryCardDataSOs();
-        }
-
-        int maxPossibility = refCardDataSOs.Count * numOfCopiesInGrid;
-        int limit = maxWidth * maxHeight;
-        if (maxPossibility > limit)
-        {
-            maxPossibility = limit;
-        }
-        width = height = Mathf.FloorToInt(Mathf.Sqrt(maxPossibility));
-
-
-        maxElementsInLibrary = (float)(width * height) / numOfCopiesInGrid ;
-        bool addOneExtraElement = false;
-        if ((float)(width * height) % 2 == 0)
-        {
-            addOneExtraElement = false;
-        }
-        else
-        {
-            maxElementsInLibrary = Mathf.FloorToInt(maxElementsInLibrary);
-            addOneExtraElement = true;
-        }
-
-        refCardDataSOs.RemoveRange((int)maxElementsInLibrary, (int)(refCardDataSOs.Count - maxElementsInLibrary));
+        int maxElementsInGrid = width * height;
+        int maxElementsInLibrary = Mathf.FloorToInt((maxElementsInGrid/ numOfCopiesInGrid));
+        RandomizeLibraryCardDataSOs();
+        refCardDataSOs.RemoveRange(maxElementsInLibrary, (refCardDataSOs.Count - maxElementsInLibrary));
 
         layoutData = new LayoutData();
         gridCardDataSOs = new List<CardDataSO>();
@@ -88,16 +77,13 @@ public class LayoutSO : ScriptableObject
             gridCardDataSOs.AddRange(refCardDataSOs);
         }
 
-        if (addOneExtraElement)
+        while (gridCardDataSOs.Count < maxElementsInGrid)
         {
-            gridCardDataSOs.Add(gridCardDataSOs[0]);
-            gridCardDataSOs.Randomize();
+            gridCardDataSOs.Add(null);
         }
-        else
-        {
-            gridCardDataSOs.Randomize();
-        }
-     
+
+        gridCardDataSOs.Randomize();
+
         int index = 0;
         for (int i = 0; i < height; i++)
         {

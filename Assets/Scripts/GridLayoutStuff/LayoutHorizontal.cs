@@ -9,6 +9,7 @@ public class LayoutHorizontal : MonoBehaviour
     [SerializeField] Card cardPrefab;
     public List<Card> InsCards => insCards;
     List<Card> insCards = new List<Card>();
+    List<Card> emptyCards = new List<Card>();
     int heightInGrid = -1;
     
     public void SpawnCards(int height, HorizontalLayoutData horizontalLayoutData)
@@ -26,12 +27,24 @@ public class LayoutHorizontal : MonoBehaviour
                 insCards.Add(newCard);
                 newCard.InitData(cardSOs[i].myCardData);
             }
+            else
+            {
+                Card newCard = Instantiate(cardPrefab, parentForCards);
+                newCard.transform.name = "empty";
+                newCard.gameObject.SetActive(true);
+                newCard.SetAsEmpty();
+                emptyCards.Add(newCard);
+            }
         }
     }
 
     public void InitUI()
     {
         foreach (var x in insCards)
+        {
+            x.InitUI();
+        }
+        foreach (var x in emptyCards)
         {
             x.InitUI();
         }

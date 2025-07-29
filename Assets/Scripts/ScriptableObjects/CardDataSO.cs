@@ -13,4 +13,12 @@ public class CardData
 public class CardDataSO : ScriptableObject
 {
     public CardData myCardData;
+
+    private void OnValidate()
+    {
+        if (myCardData.sprite)
+        {
+            myCardData.name = myCardData.sprite.name;
+        }
+    }
 }

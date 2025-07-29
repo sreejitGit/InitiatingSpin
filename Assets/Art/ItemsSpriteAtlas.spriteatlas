@@ -38,10 +38,18 @@ SpriteAtlas:
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 72267a60b7e0b487bbacbf1b85cbbf7d, type: 3}
   - {fileID: 21300000, guid: 67e0a6d01f52541d4803420663c568f4, type: 3}
   - {fileID: 21300000, guid: 4240e421ab296408f80bd66531a8b1fd, type: 3}
+  - {fileID: 21300000, guid: 1ce1b8717741e4ce089873d9769e3ac7, type: 3}
+  - {fileID: 21300000, guid: 1b73f4826e81a4b41b106dbbf230ecad, type: 3}
   - {fileID: 21300000, guid: e57dcc430746841658a52bfbc9c09230, type: 3}
+  - {fileID: 21300000, guid: 13352f63c3bdc47d38d372466c98495a, type: 3}
+  - {fileID: 21300000, guid: ddfe753403b0b46c1b9c31439ab74429, type: 3}
   - {fileID: 21300000, guid: 222bdc25483b34076976b59642b242e6, type: 3}
+  - {fileID: 21300000, guid: 1e4edbf67351f4c6f8ba10d08c8c18b3, type: 3}
+  - {fileID: 21300000, guid: eff2e877d72c64802bd8ad99252dee56, type: 3}
+  - {fileID: 21300000, guid: 816a21284991746639ccbec9b7074009, type: 3}
   - {fileID: 21300000, guid: b517e6a8178e14ef98edf6ba5a0b8332, type: 3}
   - {fileID: 21300000, guid: 537ea11995b4d447eb7119f72871288e, type: 3}
   - {fileID: 21300000, guid: d4fc6a59f52924831bf752f3eaace460, type: 3}
@@ -49,15 +57,26 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 06aa7fbbb204e4e04885ab9dded08b7e, type: 3}
   - {fileID: 21300000, guid: c490a45d023ac48fda236a89911125e3, type: 3}
   - {fileID: 21300000, guid: 14d41acd9728e4544ae8748d4fe8ee9e, type: 3}
+  - {fileID: 21300000, guid: 5d3206ed8a26c46639ef91d897d021ce, type: 3}
   - {fileID: 21300000, guid: 94ea861ebf3de43348f1efc478091146, type: 3}
   - {fileID: 21300000, guid: e2aa5f3e920234b89bfa2deb80fa9dbf, type: 3}
   - {fileID: 21300000, guid: f38584ce6681c456ba61c3a4d2f40738, type: 3}
+  - {fileID: 21300000, guid: b9f87ffe8bff74c36a85c6a12347470b, type: 3}
   - {fileID: 21300000, guid: 6ac2a8df1636547aebbc4bbbb957d0d2, type: 3}
+  - {fileID: 21300000, guid: 976dc1ef7ce794e488855fa735c08ada, type: 3}
   m_PackedSpriteNamesToIndex:
+  - dirtGrassDark
   - happy
   - dirtGrass
+  - stoneDark
+  - exclaimDark
   - stoneTop
+  - seriousDark
+  - happyDark
   - devilish
+  - stoneTopDark
+  - smileyDark
+  - devilishDark
   - crateExplosive
   - smiley
   - exclaim
@@ -65,10 +84,13 @@ SpriteAtlas:
   - cool
   - serious
   - stone
+  - dirtDark
   - coin
   - dirtDetail
   - crate
+  - coinDark
   - stoneDetail
+  - coolDark
   m_RenderDataMap: {}
   m_Tag: ItemsSpriteAtlas
   m_IsVariant: 0

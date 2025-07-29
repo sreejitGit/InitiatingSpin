@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c1f42ddc39e4ee9b18b1c7b38dbd74, type: 3}
+  m_Name: 2Layout3_3SO
+  m_EditorClassIdentifier: 
+  layoutID: HFK1Z1D6fMq8ja6DdDIT
+  libraryCardDataSOs:
+  - {fileID: 11400000, guid: 9b350c1880be641409a44961289af583, type: 2}
+  - {fileID: 11400000, guid: c49beb890681a493f89518d1c5bea667, type: 2}
+  - {fileID: 11400000, guid: 0dbc040bad0d24640abf07062452019f, type: 2}
+  - {fileID: 11400000, guid: 45b488dd27296467f9cf7f1889beb0ba, type: 2}
+  - {fileID: 11400000, guid: 9dd828b10214d44fb8944baff9e1cacb, type: 2}
+  - {fileID: 11400000, guid: 4ad65f51979334283a9b2fe65ed72ed1, type: 2}
+  - {fileID: 11400000, guid: e9c0a38d76bf44f64adc7592bfe79d21, type: 2}
+  - {fileID: 11400000, guid: 7ce677695ea754da18dde9e0e768a51f, type: 2}
+  - {fileID: 11400000, guid: baea623098c7444c3a59cf08b19f5228, type: 2}
+  - {fileID: 11400000, guid: 8877a0353392347a1ba0921bbd31a5da, type: 2}
+  - {fileID: 11400000, guid: 61e0c4103f4064e28bd35d5cc4493162, type: 2}
+  - {fileID: 11400000, guid: 8822aeca895a648fd96bd861c23baace, type: 2}
+  - {fileID: 11400000, guid: 7b3aee80c09984502b21d3a031c4c996, type: 2}
+  - {fileID: 11400000, guid: 95b64927cb52547b88e2345fbb050a31, type: 2}
+  - {fileID: 11400000, guid: 3413bec9eb2104012aa194ee0ac8d565, type: 2}
+  - {fileID: 11400000, guid: c3303a774db9a41b0b597cfb987fcfe8, type: 2}
+  - {fileID: 11400000, guid: 0c3578a39052a4c31a220036675502ea, type: 2}
+  - {fileID: 11400000, guid: def3cb40a93814b3583088e9a78d955f, type: 2}
+  - {fileID: 11400000, guid: 911a778d442594351ad53ea819ca80d7, type: 2}
+  - {fileID: 11400000, guid: b5fe2c344c2d446d4958c32a031aea7a, type: 2}
+  - {fileID: 11400000, guid: f37be51a470e54dc5849579b9a92a0ed, type: 2}
+  - {fileID: 11400000, guid: c906d92f2977d4defa619fa5dfe759ed, type: 2}
+  - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
+  - {fileID: 11400000, guid: 1cc55129a8a604b949da5560c6618d53, type: 2}
+  - {fileID: 11400000, guid: ea2f5529bcf3d4cd2afcb4f6930f9790, type: 2}
+  - {fileID: 11400000, guid: e9c8cb27f0ce74ec2963f9a16cb53b54, type: 2}
+  layoutData:
+    horizontalLayoutDatas:
+    - cardSOs:
+      - {fileID: 11400000, guid: def3cb40a93814b3583088e9a78d955f, type: 2}
+      - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
+      - {fileID: 11400000, guid: 3413bec9eb2104012aa194ee0ac8d565, type: 2}
+    - cardSOs:
+      - {fileID: 11400000, guid: def3cb40a93814b3583088e9a78d955f, type: 2}
+      - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
+      - {fileID: 11400000, guid: 3413bec9eb2104012aa194ee0ac8d565, type: 2}
+    - cardSOs:
+      - {fileID: 11400000, guid: 7b3aee80c09984502b21d3a031c4c996, type: 2}
+      - {fileID: 11400000, guid: 7b3aee80c09984502b21d3a031c4c996, type: 2}
+      - {fileID: 0}
+  numOfCopiesInGrid: 2
+  width: 3
+  height: 3
+  gridCardDataSOs:
+  - {fileID: 11400000, guid: def3cb40a93814b3583088e9a78d955f, type: 2}
+  - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
+  - {fileID: 11400000, guid: 3413bec9eb2104012aa194ee0ac8d565, type: 2}
+  - {fileID: 11400000, guid: def3cb40a93814b3583088e9a78d955f, type: 2}
+  - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
+  - {fileID: 11400000, guid: 3413bec9eb2104012aa194ee0ac8d565, type: 2}
+  - {fileID: 11400000, guid: 7b3aee80c09984502b21d3a031c4c996, type: 2}
+  - {fileID: 11400000, guid: 7b3aee80c09984502b21d3a031c4c996, type: 2}
+  - {fileID: 0}

@@ -12,9 +12,9 @@ public class LayoutSOEditor : Editor
 
         LayoutSO myComponent = (LayoutSO)target;
 
-        if (GUILayout.Button("Random LibraryCardDataSOs"))
+        if (GUILayout.Button("Generate LayoutID"))
         {
-            myComponent.RandomizeLibraryCardDataSOs();
+            myComponent.GenerateLayoutID();
         }
 
         if (GUILayout.Button("Random GenerateLayout"))

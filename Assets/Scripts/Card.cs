@@ -6,6 +6,13 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     [SerializeField] bool allowClick = false;
+   
+    [SerializeField] bool isEmpty = true;
+    public bool IsEmpty => isEmpty;
+   
+    [SerializeField] bool isOpen = false;
+    public bool IsOpen => isOpen;
+   
     [SerializeField] bool isSolved = false;
     public bool IsSolved => isSolved;
 
@@ -23,8 +30,16 @@ public class Card : MonoBehaviour
     [SerializeField] RectTransform parentToFitTo;
     [SerializeField] List<RectTransform> targetRectsToScaleToFit;
 
+    public void SetAsEmpty()
+    {
+        isOpen = false;
+        isSolved = false;
+        isEmpty = true;
+    }
+
     public void InitData(CardData cardData)
     {
+        isEmpty = false;
         myCardData = cardData;
         if (myCardData.name == "")
         {
@@ -46,8 +61,16 @@ public class Card : MonoBehaviour
 
     void OnRescaleDone()
     {
-        Hide(0f);
-        StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, 0.25f));
+        if (isEmpty)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+        }
+        else
+        {
+            Hide(0f);
+            StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, 0.25f));
+        }
     }
 
     void RescaleUI()
@@ -112,6 +135,7 @@ public class Card : MonoBehaviour
     IEnumerator flippingAnim;
     private IEnumerator FlipToShowRoutine(float duration)
     {
+        isOpen = true;
         ToggleAllowClick(false);
         float halfTime = duration / 2f;
 
@@ -164,6 +188,7 @@ public class Card : MonoBehaviour
 
     private IEnumerator FlipToHideRoutine(float duration)
     {
+        isOpen = false;
         ToggleAllowClick(false);
         if (duration <= 0f)
         {
@@ -201,10 +226,11 @@ public class Card : MonoBehaviour
         GameEvents.CardFlipFinished(this);
     }
 
-    public void EscapedTheGrid()
+    void EscapedTheGrid()
     {
         isSolved = true;
         StartCoroutine(Utils.FadeCanvas(canvasGroup, 1f, 0.5f, 0.25f));
+        GameEvents.CheckForLevelCompletion();
     }
 
     List<Card> hideOnIncorrectCardsSequence = new List<Card>();
