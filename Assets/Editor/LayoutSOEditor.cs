@@ -15,11 +15,13 @@ public class LayoutSOEditor : Editor
         if (GUILayout.Button("Generate LayoutID"))
         {
             myComponent.GenerateLayoutID();
-        }
+            EditorUtility.SetDirty(myComponent);
+         }
 
         if (GUILayout.Button("Random GenerateLayout"))
         {
             myComponent.RandomGenerateLayout();
+            EditorUtility.SetDirty(myComponent);
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c1f42ddc39e4ee9b18b1c7b38dbd74, type: 3}
   m_Name: 2Layout2_2SO
   m_EditorClassIdentifier: 
-  layoutID: HFK1Z1D6fMq8ja6DdDIT
+  layoutID: 3BdHfb7bhxLgCqxC0cQc
   libraryCardDataSOs:
   - {fileID: 11400000, guid: 9b350c1880be641409a44961289af583, type: 2}
   - {fileID: 11400000, guid: c49beb890681a493f89518d1c5bea667, type: 2}
@@ -48,6 +48,7 @@ MonoBehaviour:
     - cardSOs:
       - {fileID: 11400000, guid: 1cc55129a8a604b949da5560c6618d53, type: 2}
       - {fileID: 11400000, guid: 1cc55129a8a604b949da5560c6618d53, type: 2}
+  scorePerCard: 5
   numOfCopiesInGrid: 2
   width: 2
   height: 2
