@@ -134,11 +134,17 @@ public class GameManager : MonoBehaviour
 
     void ResetGame()
     {
+        ResetOngoingStreak();
         ongoingLayoutSO = null;
         currentMatches = 0;
         currentScore = 0;
         currentTries = 0;
         GameEvents.ResetGameplay();
+    }
+
+    void ResetOngoingStreak()
+    {
+        ongoingStreak = 1;
     }
 
     void EnterGame()
@@ -337,7 +343,7 @@ public class GameManager : MonoBehaviour
         else
         {
             SetCurrentTries(currentTries + 1);
-            ongoingStreak = 1;
+            ResetOngoingStreak();
             List<Card> incorrectCardsSequence = new List<Card>(clickedSequenceOfCards);
             c.HideASAP(incorrectCardsSequence);
 
