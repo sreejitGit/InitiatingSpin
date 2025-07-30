@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     [SerializeField] bool allowClick = false;
-   
+
     [SerializeField] bool isEmpty = true;
     public bool IsEmpty => isEmpty;
-   
+
     [SerializeField] bool isOpen = false;
     public bool IsOpen => isOpen;
-   
+
     [SerializeField] bool isSolved = false;
     public bool IsSolved => isSolved;
 
@@ -29,13 +29,6 @@ public class Card : MonoBehaviour
     [Header("UI scale to fit")]
     [SerializeField] RectTransform parentToFitTo;
     [SerializeField] List<RectTransform> targetRectsToScaleToFit;
-
-    public void SetAsEmpty()
-    {
-        isOpen = false;
-        isSolved = false;
-        isEmpty = true;
-    }
 
     public void InitData(CardData cardData)
     {
@@ -151,23 +144,36 @@ public class Card : MonoBehaviour
         shownObj.transform.rotation = endRotation;
         hiddenObj.transform.rotation = startRotation;
 
-        yield return Utils.BounceUpEffect(hiddenObj.transform, hiddenObj.transform.localScale);
-        yield return Utils.RotateSlerp(hiddenObj.transform, startRotation, endRotation, halfTime);
+        if (halfTime > 0f)
+        {
+            yield return Utils.BounceUpEffect(hiddenObj.transform, hiddenObj.transform.localScale);
+            yield return Utils.RotateSlerp(hiddenObj.transform, startRotation, endRotation, halfTime);
+        }
         hiddenObj.transform.rotation = endRotation;
         hiddenObj.SetActive(false);
 
         shownObj.transform.localScale = hiddenObj.transform.localScale;
-        yield return Utils.RotateSlerp(shownObj.transform, endRotation, startRotation, halfTime);
+        if (halfTime > 0f)
+        {
+            yield return Utils.RotateSlerp(shownObj.transform, endRotation, startRotation, halfTime);
+        }
         shownObj.transform.rotation = startRotation;
-        yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
+        if (halfTime > 0f)
+        {
+             yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
+        }   
 
-        if (hideOnCorrectCardsSequence.Count > 0)
+       if (hideOnCorrectCardsSequence.Count > 0)
         {
             foreach (var x in hideOnCorrectCardsSequence)
             {
                 x.EscapedTheGrid();
             }
             hideOnCorrectCardsSequence.Clear();
+        }
+        else if (isSolved)
+        {
+            EscapedTheGrid();
         }
         else if (hideOnIncorrectCardsSequence.Count > 0)
         {
@@ -213,22 +219,31 @@ public class Card : MonoBehaviour
             shownObj.transform.rotation = startRotation;
             hiddenObj.transform.rotation = endRotation;
 
-            yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
-            yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
+            if (halfTime > 0f)
+            {
+                yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
+                yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
+            }   
             shownObj.transform.rotation = endRotation;
             shownObj.SetActive(false);
 
             hiddenObj.transform.localScale = shownObj.transform.localScale;
-            yield return Utils.RotateSlerp(hiddenObj.transform, endRotation, startRotation, halfTime);
+            if (halfTime > 0f)
+            {
+                yield return Utils.RotateSlerp(hiddenObj.transform, endRotation, startRotation, halfTime);
+            }
             hiddenObj.transform.rotation = startRotation;
-            yield return Utils.BounceDownEffect(hiddenObj.transform, Vector2.one);
+            if (halfTime > 0f)
+            {
+                yield return Utils.BounceDownEffect(hiddenObj.transform, Vector2.one);
+            }
         }
         GameEvents.CardFlipFinished(this);
     }
 
     void EscapedTheGrid()
     {
-        isSolved = true;
+        ChangeSolvedStateToTrue();
         StartCoroutine(Utils.FadeCanvas(canvasGroup, 1f, 0.5f, 0.25f));
         GameEvents.CheckForLevelCompletion();
     }
@@ -236,13 +251,55 @@ public class Card : MonoBehaviour
     List<Card> hideOnIncorrectCardsSequence = new List<Card>();
     public void HideASAP(List<Card> incorrectCardsSequence)
     {
+        foreach (var x in incorrectCardsSequence)
+        {
+            x.ChangeOpenStateToFalse();
+        }
+        ChangeOpenStateToFalse();
         hideOnIncorrectCardsSequence = incorrectCardsSequence;
     }
 
     List<Card> hideOnCorrectCardsSequence = new List<Card>();
     public void CallEscapedTheGrid(List<Card> correctCardsSequence)
     {
+        foreach (var x in correctCardsSequence)
+        {
+            x.ChangeSolvedStateToTrue();
+        }
         hideOnCorrectCardsSequence = correctCardsSequence;
     }
 
+    public void ChangeSolvedStateToTrue()
+    {
+        isSolved = true;
+    }
+
+    public void ChangeOpenStateToFalse()
+    {
+        isSolved = false;
+        isOpen = false;
+    }
+
+    public void SetAsSolvedFromSavedState()
+    {
+        isOpen = true;
+        ChangeSolvedStateToTrue();
+        isEmpty = false;
+        Show(0.25f);
+    }
+
+    public void SetAsOpenFromSavedState()
+    {
+        isOpen = true;
+        isSolved = false;
+        isEmpty = false;
+        Show(0.25f);
+    }
+
+    public void SetAsEmpty()
+    {
+        isOpen = false;
+        isSolved = false;
+        isEmpty = true;
+    }
 }

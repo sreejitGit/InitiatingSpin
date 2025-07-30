@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0c1f42ddc39e4ee9b18b1c7b38dbd74, type: 3}
-  m_Name: 2Layout5_5SO
+  m_Name: 2Layout5_6SO
   m_EditorClassIdentifier: 
   layoutID: pbmD9IE1cqj4nsOlmm0H
   libraryCardDataSOs:
@@ -74,7 +74,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: baea623098c7444c3a59cf08b19f5228, type: 2}
   numOfCopiesInGrid: 2
   width: 5
-  height: 5
+  height: 6
   gridCardDataSOs:
   - {fileID: 11400000, guid: ff58c81e39da744abb525354aec3f8ab, type: 2}
   - {fileID: 11400000, guid: 9dd828b10214d44fb8944baff9e1cacb, type: 2}

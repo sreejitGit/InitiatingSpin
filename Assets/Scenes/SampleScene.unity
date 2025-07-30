@@ -706,6 +706,8 @@ MonoBehaviour:
     cardsState: []
   layoutSpawner: {fileID: 954903550}
   levelsLayoutSO:
+  - {fileID: 11400000, guid: a1f9edc1f065e45988b61094548d14c4, type: 2}
+  - {fileID: 11400000, guid: 816a86aced6d440f5a9badb9c6a6671e, type: 2}
   - {fileID: 11400000, guid: 6fe68b54156e2499180ca032bd4d0fd7, type: 2}
   - {fileID: 11400000, guid: 77fc2d492f4db413387a416fc78c9ab2, type: 2}
   - {fileID: 11400000, guid: 8a9bf49553ab64cb6ad337ce14a577bb, type: 2}
