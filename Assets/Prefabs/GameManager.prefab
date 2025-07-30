@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f2c2815dbe24a3585de8dc699d7d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showLogs: 0
   ongoingGameState:
     layoutState:
       layoutID: 

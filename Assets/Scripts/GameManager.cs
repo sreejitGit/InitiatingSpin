@@ -16,13 +16,14 @@ public class GameState
     public void SetEmptyLayoutState()
     {
         this.layoutState = new LayoutState();
+        this.layoutState.solved = false;
     }
 
     [System.Serializable]
     public class LayoutState
     {
         public string layoutID;
-        public bool isSolved;
+        public bool solved = false;
         public int score;
         public int matches;
         public int tries;
@@ -32,7 +33,7 @@ public class GameState
         {
             LayoutState x = new LayoutState();
             x.layoutID = layoutID;
-            x.isSolved = isSolved;
+            x.solved = solved;
             x.score = score;
             x.matches = matches;
             x.tries = tries;
@@ -48,14 +49,14 @@ public class GameState
     [System.Serializable]
     public class CardState
     {
-        public bool isSolved;
+        public bool solved = false;
         public string spriteName;
         public bool isOpen = false;
 
         public CardState Clone()
         {
             CardState x = new CardState();
-            x.isSolved = isSolved;
+            x.solved = solved;
             x.spriteName = spriteName;
             x.isOpen = isOpen;
             return x;
@@ -72,8 +73,9 @@ public class GameState
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] bool showLogs = true;
     [Header("OngoingGameState")]
-    public GameState ongoingGameState;
+    [SerializeField]  GameState ongoingGameState;
 
     [Header("Layout stuff")]
     [SerializeField] LayoutSpawner layoutSpawner;
@@ -148,7 +150,7 @@ public class GameManager : MonoBehaviour
         SetCurrentMatches(currentMatches);
         SetCurrentTries(currentTries);
         bool foundLayoutFromLastGame = false;
-        if (ongoingGameState.layoutState.isSolved == false)
+        if (ongoingGameState.layoutState.solved == false)
         {
             foreach (var x in levelsLayoutSO)
             {
@@ -186,6 +188,7 @@ public class GameManager : MonoBehaviour
         }
         ongoingLayoutSO = tempLayout;
         ongoingGameState.SetEmptyLayoutState();
+        ongoingGameState.layoutState.layoutID = ongoingLayoutSO.layoutID;
     }
 
     void Spawn()
@@ -218,7 +221,7 @@ public class GameManager : MonoBehaviour
                     {
                         foreach (var y in x.InsCards)
                         {
-                            if (ongoingGameState.layoutState.cardsState[index].isSolved)
+                            if (ongoingGameState.layoutState.cardsState[index].solved)
                             {
                                 cardsOpened = true;
                                 y.SetAsSolvedFromSavedState();
@@ -236,6 +239,7 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     ongoingGameState.SetEmptyLayoutState();
+                    ongoingGameState.layoutState.layoutID = ongoingLayoutSO.layoutID;
                 }
 
                 if (cardsOpened)
@@ -368,7 +372,7 @@ public class GameManager : MonoBehaviour
         {
             levelStarted = false;
             SFXManager.Instance.PlaySFXOnce(SFXManager.GameplaySFXType.GameWin);
-            ongoingGameState.layoutState.isSolved = true;
+            ongoingGameState.layoutState.solved = true;
             SaveGameState();
             if (ienumRestartLevel != null)
             {
@@ -401,11 +405,11 @@ public class GameManager : MonoBehaviour
         ongoingGameState.layoutState.layoutID = ongoingLayoutSO.layoutID;
         if (IsLevelSolved())
         {
-            ongoingGameState.layoutState.isSolved = true;
+            ongoingGameState.layoutState.solved = true;
         }
         else
         {
-            ongoingGameState.layoutState.isSolved = false;
+            ongoingGameState.layoutState.solved = false;
         }
 
         ongoingGameState.layoutState.score = currentScore;
@@ -417,7 +421,7 @@ public class GameManager : MonoBehaviour
             foreach (var y in x.InsCards)
             {
                 GameState.CardState newCardState = new GameState.CardState();
-                newCardState.isSolved = y.IsSolved;
+                newCardState.solved = y.IsSolved;
                 newCardState.isOpen = y.IsOpen;
                 newCardState.spriteName = y.CardSprite.name;
                 ongoingGameState.layoutState.cardsState.Add(newCardState);
@@ -553,8 +557,7 @@ public class GameManager : MonoBehaviour
 
     void DebugLog(string s)
     {
-        bool shouldLog = true;
-        if (shouldLog)
+        if (showLogs)
         {
             Debug.Log(s);
         }
