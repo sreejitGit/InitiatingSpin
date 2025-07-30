@@ -26,6 +26,10 @@ public class LayoutSO : ScriptableObject
     [Header("grid layout data")]
     public LayoutData layoutData;
 
+    [Header("scoring data")]
+    [SerializeField] int scorePerCard = 5;
+    public int ScorePerCard => scorePerCard;
+
     [Header("RandomGenerateLayout")]
     [SerializeField][Range(2,3)] int numOfCopiesInGrid = 2;
     public int NumOfCopiesInGrid => numOfCopiesInGrid;

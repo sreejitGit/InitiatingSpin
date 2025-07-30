@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int currentScore = 0;
     const string nameOfSavedFile = "InitSpinSavedData.dat";
     bool levelStarted = false;
+    int ongoingStreak = 1;
 
     private void OnEnable()
     {
@@ -133,7 +134,18 @@ public class GameManager : MonoBehaviour
 
     void LoadRandomLayout()
     {
-        ongoingLayoutSO = levelsLayoutSO[UnityEngine.Random.Range(0, levelsLayoutSO.Count)];
+        LayoutSO tempLayout = levelsLayoutSO[UnityEngine.Random.Range(0, levelsLayoutSO.Count)];
+        if (levelsLayoutSO.Count > 1)
+        {
+            if (ongoingLayoutSO != null)
+            {
+                while (tempLayout.layoutID == ongoingLayoutSO.layoutID)
+                {
+                    tempLayout = levelsLayoutSO[UnityEngine.Random.Range(0, levelsLayoutSO.Count)];
+                }
+            }
+        }
+        ongoingLayoutSO = tempLayout;
         ongoingGameState.SetEmptyLayoutState();
     }
 
@@ -202,14 +214,14 @@ public class GameManager : MonoBehaviour
                         {
                             if (index >= ongoingGameState.layoutState.cardsState.Count)
                             {
-                                Debug.LogError("index bounds layout saved state for index " + index + " name " + y.CardSprite.name);
+                                // Debug.LogError("index bounds layout saved state for index " + index + " name " + y.CardSprite.name);
                                 return false;
                             }
                             else
                             {
                                 if (y.CardSprite.name != ongoingGameState.layoutState.cardsState[index].spriteName)
                                 {
-                                    Debug.LogError("incorrect layout saved state for index " + index + " name " + y.CardSprite.name);
+                                    // Debug.LogError("incorrect layout saved state for index " + index + " name " + y.CardSprite.name);
                                     return false;
                                 }
                             }
@@ -261,9 +273,10 @@ public class GameManager : MonoBehaviour
 
         if (tempCorrectCardsSequence.Count == ongoingLayoutSO.NumOfCopiesInGrid)
         {
-            AddToCurrentScore(5 * tempCorrectCardsSequence.Count);
-            c.CallEscapedTheGrid(tempCorrectCardsSequence);
+            AddToCurrentScore(ongoingStreak * ongoingLayoutSO.ScorePerCard * tempCorrectCardsSequence.Count);
+            c.CallEscapedTheGrid(tempCorrectCardsSequence,ongoingStreak * ongoingLayoutSO.ScorePerCard);
             clickedSequenceOfCards.Clear();
+            ongoingStreak++;
         }
         else if (isIncorrectClick == false)
         {
@@ -278,6 +291,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            ongoingStreak = 1;
             List<Card> incorrectCardsSequence = new List<Card>(clickedSequenceOfCards);
             c.HideASAP(incorrectCardsSequence);
 
@@ -310,6 +324,7 @@ public class GameManager : MonoBehaviour
         }
         if (IsLevelSolved())
         {
+            levelStarted = false;
             SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.GameWin);
             ongoingGameState.layoutState.isSolved = true;
             SaveGameState(true);

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Card : MonoBehaviour
 {
+    [Header("bools")]
     [SerializeField] bool allowClick = false;
 
     [SerializeField] bool isEmpty = true;
@@ -25,6 +27,9 @@ public class Card : MonoBehaviour
     [SerializeField] GameObject hiddenObj;
     [SerializeField] GameObject shownObj;
     [SerializeField] Image cardContentImage;
+
+    [Header("UI stuff")]
+    [SerializeField] TextMeshProUGUI scoreText;
 
     [Header("UI scale to fit")]
     [SerializeField] RectTransform parentToFitTo;
@@ -125,7 +130,7 @@ public class Card : MonoBehaviour
         }
     }
 
-    IEnumerator PlayWelcomeAnimation(float duration = 0.125f,float bounceScale = 1.2f)
+    IEnumerator PlayWelcomeAnimation(float duration = 0.125f, float bounceScale = 1.2f)
     {
         float time = 0f;
 
@@ -188,15 +193,23 @@ public class Card : MonoBehaviour
         shownObj.transform.rotation = startRotation;
         if (halfTime > 0f)
         {
-             yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
+            yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
         }
 
         if (hideOnCorrectCardsSequence.Count > 0)
         {
-            SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.CorrectMatch);
+            SFXManager.instance.PlaySFX(SFXManager.GameplaySFXType.CorrectMatch);
             foreach (var x in hideOnCorrectCardsSequence)
             {
                 x.EscapedTheGrid();
+            }
+            if (obtainedScore > 0)
+            {
+                foreach (var x in hideOnCorrectCardsSequence)
+                {
+                    x.ShowScoreAnim(obtainedScore);
+                }
+                obtainedScore = 0;
             }
             hideOnCorrectCardsSequence.Clear();
         }
@@ -207,7 +220,7 @@ public class Card : MonoBehaviour
         else if (hideOnIncorrectCardsSequence.Count > 0)
         {
             this.DelayExecute(() =>
-            { 
+            {
                 SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.IncorrectMatch);
             }, 0.5f);
             foreach (var x in hideOnIncorrectCardsSequence)
@@ -257,7 +270,7 @@ public class Card : MonoBehaviour
                 yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
                 SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.CardClose);
                 yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
-            }   
+            }
             shownObj.transform.rotation = endRotation;
             shownObj.SetActive(false);
 
@@ -293,9 +306,11 @@ public class Card : MonoBehaviour
         hideOnIncorrectCardsSequence = incorrectCardsSequence;
     }
 
+    int obtainedScore;
     List<Card> hideOnCorrectCardsSequence = new List<Card>();
-    public void CallEscapedTheGrid(List<Card> correctCardsSequence)
+    public void CallEscapedTheGrid(List<Card> correctCardsSequence, int score)
     {
+        obtainedScore = score;
         foreach (var x in correctCardsSequence)
         {
             x.ChangeSolvedStateToTrue();
@@ -335,5 +350,36 @@ public class Card : MonoBehaviour
         isOpen = false;
         isSolved = false;
         isEmpty = true;
+    }
+
+    void ShowScoreAnim(int score)
+    {
+        scoreText.text = $"+{score}";
+        scoreText.transform.localPosition = Vector2.zero;
+        if (ienumMoveTextUpAnim != null)
+        {
+            StopCoroutine(ienumMoveTextUpAnim);
+        }
+        StartCoroutine(ienumMoveTextUpAnim = MoveTextUpRoutine(scoreText.transform));
+    }
+
+    IEnumerator ienumMoveTextUpAnim;
+    IEnumerator MoveTextUpRoutine(Transform t, float moveDistance = 300,float duration = 2f)
+    {
+        scoreText.gameObject.SetActive(true);
+        Vector3 startPos = t.localPosition;
+        Vector3 endPos = startPos + Vector3.up * moveDistance;
+
+        float time = 0f;
+        while (time < duration)
+        {
+            t.localPosition = Vector3.Lerp(startPos, endPos, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        t.localPosition = endPos;
+        scoreText.gameObject.SetActive(false);
+        
     }
 }
