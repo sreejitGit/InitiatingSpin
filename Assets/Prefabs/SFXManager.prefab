@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6861726489744134867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6861726489744134866}
+  - component: {fileID: 6861726489744134865}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6861726489744134866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861726489744134867}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6861726489744134865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6861726489744134867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae7526cc6510468d8d165778091ec8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameplaySfxClips:
+  - key: 1
+    clip: {fileID: 8300000, guid: ffcf0d3eb325b4b398f247503acf51f7, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  - key: 2
+    clip: {fileID: 8300000, guid: 4fa4c50a2ce1540e59ba0c743cd570f9, type: 3}
+    altClips: []
+    volume: 0.4
+    isLoop: 0
+  - key: 3
+    clip: {fileID: 8300000, guid: c2844bd524c284ab79a788b5db3ee7a9, type: 3}
+    altClips: []
+    volume: 0.8
+    isLoop: 0
+  - key: 4
+    clip: {fileID: 8300000, guid: 1db62f1ec9dfa44859b92d0dd93b0b25, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  - key: 5
+    clip: {fileID: 8300000, guid: be9efeee249e643b2863812f92e9fcfe, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  - key: 6
+    clip: {fileID: 8300000, guid: 72512278378174113ac4548951496b6a, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  uiSfxClips:
+  - key: 1
+    clip: {fileID: 8300000, guid: b4f9c05cd4b294ea79459f9021aca58d, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  - key: 2
+    clip: {fileID: 8300000, guid: c093cd8af9af04e8ca50e3754f7e4486, type: 3}
+    altClips: []
+    volume: 1
+    isLoop: 0
+  sfxSourcePrefab: {fileID: 5958061858007348752, guid: f1504fc5b0e3748338c93fafa82b18d3, type: 3}

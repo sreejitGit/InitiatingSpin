@@ -11,6 +11,15 @@ public class LayoutSpawner : MonoBehaviour
     public List<LayoutHorizontal> InsLayoutHorizontals =>insLayoutHorizontals;
     List<LayoutHorizontal> insLayoutHorizontals = new List<LayoutHorizontal>();
 
+    private void OnEnable()
+    {
+        GameEvents.OnResetGame += ResetLayout;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnResetGame -= ResetLayout;
+    }
 
     public void SpawnLayout(LayoutSO layoutSO)
     {
@@ -28,7 +37,7 @@ public class LayoutSpawner : MonoBehaviour
             newHori.SpawnCards(j, layoutSO.layoutData.horizontalLayoutDatas[j]);
         }
         yield return new WaitForEndOfFrame();
-        SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.LayoutOpen);
+        SFXManager.Instance.PlaySFXOnce(SFXManager.GameplaySFXType.LayoutOpen);
         foreach (var x in insLayoutHorizontals)
         {
             yield return x.InitUI();

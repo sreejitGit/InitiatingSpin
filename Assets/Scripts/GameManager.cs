@@ -15,7 +15,7 @@ public class GameState
 
     public void SetEmptyLayoutState()
     {
-        layoutState = new LayoutState();
+        this.layoutState = new LayoutState();
     }
 
     [System.Serializable]
@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<LayoutSO> levelsLayoutSO = new List<LayoutSO>();
     LayoutSO ongoingLayoutSO;
 
+    public UIManager UIMan => UIManager.Instance;
+
     [Header("gameplay stuff")]
     [SerializeField] List<Card> clickedSequenceOfCards = new List<Card>();
     [SerializeField] int currentScore = 0;
@@ -91,6 +93,8 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        GameEvents.OnEnterHome += EnterHome;
+        GameEvents.OnEnterGame += EnterGame;
         GameEvents.OnCheckForLevelCompletion += CheckForLevelCompletion;
         GameEvents.OnLayoutReady += LayoutSpawned;
         GameEvents.OnPlayerClickedShownCard += PlayerClickedShownCard;
@@ -100,7 +104,8 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        SaveGameState(true);
+        GameEvents.OnEnterHome -= EnterHome;
+        GameEvents.OnEnterGame -= EnterGame;
         GameEvents.OnCheckForLevelCompletion -= CheckForLevelCompletion;
         GameEvents.OnLayoutReady -= LayoutSpawned;
         GameEvents.OnPlayerClickedShownCard -= PlayerClickedShownCard;
@@ -116,6 +121,29 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        EnterHome();
+    }
+
+    void EnterHome()
+    {
+        ResetGame();
+        UIMan.ChangeScreen(ScreenName.MainMenu);
+    }
+
+    void ResetGame()
+    {
+        ongoingLayoutSO = null;
+        currentMatches = 0;
+        currentScore = 0;
+        currentTries = 0;
+        GameEvents.ResetGameplay();
+    }
+
+    void EnterGame()
+    {
+        ResetGame();
+        ongoingGameState = LoadSavedData();
+        UIMan.ChangeScreen(ScreenName.Gameplay);
         SetCurrentScore(currentScore);
         SetCurrentMatches(currentMatches);
         SetCurrentTries(currentTries);
@@ -138,7 +166,7 @@ public class GameManager : MonoBehaviour
         if (foundLayoutFromLastGame == false)
         {
             LoadRandomLayout();
-            SaveGameState(true);
+            SaveGameState();
         }
         Spawn();
     }
@@ -169,7 +197,7 @@ public class GameManager : MonoBehaviour
 
     void LayoutSpawned()
     {
-        SFXManager.instance.StopSFX(SFXManager.GameplaySFXType.LayoutOpen);
+        SFXManager.Instance.StopSFX(SFXManager.GameplaySFXType.LayoutOpen);
         foreach (var x in layoutSpawner.InsLayoutHorizontals)
         {
             foreach (var y in x.InsCards)
@@ -212,7 +240,7 @@ public class GameManager : MonoBehaviour
 
                 if (cardsOpened)
                 {
-                    SFXManager.instance.PlaySFX(SFXManager.GameplaySFXType.CardOpen);
+                    SFXManager.Instance.PlaySFX(SFXManager.GameplaySFXType.CardOpen);
                 }
 
 
@@ -244,13 +272,13 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        SaveGameState(true);
+        SaveGameState();
         levelStarted = true;
     }
 
     void PlayerClickedShownCard(Card c)
     {
-        SaveGameState(true);
+        SaveGameState();
     }
 
     void PlayerClickedHiddenCard(Card c)
@@ -260,7 +288,7 @@ public class GameManager : MonoBehaviour
             DebugLog(c.transform.name + " already in clickedSequenceOfCards");
             return;
         }
-        SFXManager.instance.PlaySFX(SFXManager.GameplaySFXType.CardOpen);
+        SFXManager.Instance.PlaySFX(SFXManager.GameplaySFXType.CardOpen);
         c.Show();
 
         List<Card> tempCorrectCardsSequence = new List<Card>();
@@ -311,7 +339,7 @@ public class GameManager : MonoBehaviour
 
             clickedSequenceOfCards.Clear();
         }
-        SaveGameState(true);
+        SaveGameState();
     }
 
     void CardFlipFinished(Card c)
@@ -326,7 +354,7 @@ public class GameManager : MonoBehaviour
             {
                 c.ToggleAllowClick(true);
             }
-            SaveGameState(true);
+            SaveGameState();
         }
     }
 
@@ -339,9 +367,9 @@ public class GameManager : MonoBehaviour
         if (IsLevelSolved())
         {
             levelStarted = false;
-            SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.GameWin);
+            SFXManager.Instance.PlaySFXOnce(SFXManager.GameplaySFXType.GameWin);
             ongoingGameState.layoutState.isSolved = true;
-            SaveGameState(true);
+            SaveGameState();
             if (ienumRestartLevel != null)
             {
                 StopCoroutine(ienumRestartLevel);
@@ -351,12 +379,25 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            SaveGameState(true);
+            SaveGameState();
         }
     }
 
-    void SaveGameState(bool writeToDisk = false)
+    void SaveGameState(bool writeToDisk = true)
     {
+        if (ongoingLayoutSO == null)
+        {
+            return;
+        }
+
+        if (ongoingGameState == null)
+        {
+            ongoingGameState = new GameState();
+        }
+        else
+        {
+            ongoingGameState.SetEmptyLayoutState();
+        }
         ongoingGameState.layoutState.layoutID = ongoingLayoutSO.layoutID;
         if (IsLevelSolved())
         {
@@ -386,14 +427,21 @@ public class GameManager : MonoBehaviour
         if (writeToDisk)
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(Application.persistentDataPath + "/" + nameOfSavedFile);
+            string path = Application.persistentDataPath + "/" + nameOfSavedFile;
+            FileStream file = File.Create(path);
             bf.Serialize(file, ongoingGameState);
-            file.Close();
+            file.Close();FileInfo fileInfo = new FileInfo(path);
+            long fileSizeInBytes = fileInfo.Length;
+
+            // Optional: Convert to kilobytes or megabytes
+            float fileSizeInKB = fileSizeInBytes / 1024f;
+            float fileSizeInMB = fileSizeInKB / 1024f;
+
+            DebugLog($"Saved file size: {fileSizeInBytes} bytes ,{fileSizeInKB} KB , {fileSizeInMB} MB");
         }
     }
 
-    [ContextMenu("ResetSavedData")]
-    void ResetSavedData()
+    public static void ResetSavedData()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/" + nameOfSavedFile);
@@ -434,9 +482,7 @@ public class GameManager : MonoBehaviour
         SetCurrentScore(0);
         SetCurrentMatches(0);
         SetCurrentTries(0);
-        LoadRandomLayout();
-        SaveGameState(true);
-        Spawn();
+        UIMan.ChangeScreen(ScreenName.MainMenu);
     }
 
     bool IsLevelSolved()
@@ -507,7 +553,7 @@ public class GameManager : MonoBehaviour
 
     void DebugLog(string s)
     {
-        bool shouldLog = false;
+        bool shouldLog = true;
         if (shouldLog)
         {
             Debug.Log(s);

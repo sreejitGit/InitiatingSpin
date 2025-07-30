@@ -41,7 +41,7 @@ public class SFXManager : MonoBehaviour
     public List<GenericSfxClips<GameplaySFXType>> gameplaySfxClips = new List<GenericSfxClips<GameplaySFXType>>();
     public List<GenericSfxClips<UiSFXType>> uiSfxClips = new List<GenericSfxClips<UiSFXType>>();
 
-    public static SFXManager instance;
+    public static SFXManager Instance;
     public GameObject sfxSourcePrefab;
     protected List<AudioSource> sfxSources = new List<AudioSource>();
 
@@ -57,7 +57,7 @@ public class SFXManager : MonoBehaviour
 
     protected virtual void Awake()
     {
-        instance = this;
+        Instance = this;
         SetSfxClipsDictionary();
     }
 

@@ -198,7 +198,7 @@ public class Card : MonoBehaviour
 
         if (hideOnCorrectCardsSequence.Count > 0)
         {
-            SFXManager.instance.PlaySFX(SFXManager.GameplaySFXType.CorrectMatch);
+            SFXManager.Instance.PlaySFX(SFXManager.GameplaySFXType.CorrectMatch);
             foreach (var x in hideOnCorrectCardsSequence)
             {
                 x.EscapedTheGrid();
@@ -221,7 +221,7 @@ public class Card : MonoBehaviour
         {
             this.DelayExecute(() =>
             {
-                SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.IncorrectMatch);
+                SFXManager.Instance.PlaySFXOnce(SFXManager.GameplaySFXType.IncorrectMatch);
             }, 0.5f);
             foreach (var x in hideOnIncorrectCardsSequence)
             {
@@ -268,7 +268,7 @@ public class Card : MonoBehaviour
             if (halfTime > 0f)
             {
                 yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
-                SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.CardClose);
+                SFXManager.Instance.PlaySFXOnce(SFXManager.GameplaySFXType.CardClose);
                 yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
             }
             shownObj.transform.rotation = endRotation;

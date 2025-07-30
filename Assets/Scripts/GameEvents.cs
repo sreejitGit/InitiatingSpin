@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameEvents
 {
-
+    public static event System.Action OnEnterHome;
+    public static event System.Action OnResetGame;
+    public static event System.Action OnEnterGame;
     public static event System.Action OnCheckForLevelCompletion;
     public static event System.Action OnLayoutReady;
     public static event System.Action<Card> OnPlayerClickedShownCard;
@@ -16,6 +18,9 @@ public class GameEvents
 
     public static void ClearEvents()
     {
+        OnEnterHome = null;
+        OnResetGame = null;
+        OnEnterGame = null;
         OnCheckForLevelCompletion = null;
         OnLayoutReady = null;
         OnPlayerClickedShownCard = null;
@@ -24,6 +29,21 @@ public class GameEvents
         OnUpdatedCurrentScore = null;
         OnUpdatedCurrentMatches = null;
         OnUpdatedCurrentTries = null;
+    }
+
+    public static void EnterHome()
+    {
+        OnEnterHome?.Invoke();
+    }
+
+    public static void ResetGameplay()
+    {
+        OnResetGame?.Invoke();
+    }
+
+    public static void EnterGame()
+    {
+        OnEnterGame?.Invoke();
     }
 
     public static void CheckForLevelCompletion()

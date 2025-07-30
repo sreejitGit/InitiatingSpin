@@ -3,24 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GameStatsUI : MonoBehaviour
+public class GameStatsUI : BaseScreenUI
 {
     [SerializeField] TextMeshProUGUI currentScoreText;
     [SerializeField] TextMeshProUGUI currentMatchesText;
     [SerializeField] TextMeshProUGUI currentTriesText;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         GameEvents.OnUpdatedCurrentScore += UpdatedCurrentScore;
         GameEvents.OnUpdatedCurrentMatches += UpdatedCurrentMatches;
         GameEvents.OnUpdatedCurrentTries += UpdatedCurrentTries;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         GameEvents.OnUpdatedCurrentScore -= UpdatedCurrentScore;
         GameEvents.OnUpdatedCurrentMatches -= UpdatedCurrentMatches;
         GameEvents.OnUpdatedCurrentTries -= UpdatedCurrentTries;
+    }
+
+    public override void Show()
+    {
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+    }
+
+    public void EnterHomeClicked()
+    {
+        GameEvents.EnterHome();
     }
 
     void UpdatedCurrentScore(int currentScore)
