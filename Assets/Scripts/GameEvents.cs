@@ -11,6 +11,8 @@ public class GameEvents
     public static event System.Action<Card> OnPlayerClickedHiddenCard;
     public static event System.Action<Card> OnCardFlipFinished;
     public static event System.Action<int> OnUpdatedCurrentScore;
+    public static event System.Action<int> OnUpdatedCurrentMatches;
+    public static event System.Action<int> OnUpdatedCurrentTries;
 
     public static void ClearEvents()
     {
@@ -20,6 +22,8 @@ public class GameEvents
         OnPlayerClickedHiddenCard = null;
         OnCardFlipFinished = null;
         OnUpdatedCurrentScore = null;
+        OnUpdatedCurrentMatches = null;
+        OnUpdatedCurrentTries = null;
     }
 
     public static void CheckForLevelCompletion()
@@ -50,5 +54,15 @@ public class GameEvents
     public static void UpdatedCurrentScore(int currentScore)
     {
         OnUpdatedCurrentScore?.Invoke(currentScore);
+    }
+
+    public static void UpdatedCurrentMatches(int currentMatches)
+    {
+        OnUpdatedCurrentMatches?.Invoke(currentMatches);
+    }
+
+    public static void UpdatedCurrentTries(int currentTries)
+    {
+        OnUpdatedCurrentTries?.Invoke(currentTries);
     }
 }

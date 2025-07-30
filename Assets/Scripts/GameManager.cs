@@ -24,6 +24,8 @@ public class GameState
         public string layoutID;
         public bool isSolved;
         public int score;
+        public int matches;
+        public int tries;
         public List<CardState> cardsState = new List<CardState>();
 
         public LayoutState Clone()
@@ -32,6 +34,8 @@ public class GameState
             x.layoutID = layoutID;
             x.isSolved = isSolved;
             x.score = score;
+            x.matches = matches;
+            x.tries = tries;
             foreach (var y in cardsState)
             {
                 x.cardsState.Add(y.Clone());
@@ -79,6 +83,8 @@ public class GameManager : MonoBehaviour
     [Header("gameplay stuff")]
     [SerializeField] List<Card> clickedSequenceOfCards = new List<Card>();
     [SerializeField] int currentScore = 0;
+    [SerializeField] int currentMatches = 0;
+    [SerializeField] int currentTries = 0;
     const string nameOfSavedFile = "InitSpinSavedData.dat";
     bool levelStarted = false;
     int ongoingStreak = 1;
@@ -105,11 +111,14 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         ongoingGameState = LoadSavedData();
+        Application.targetFrameRate = 60;
     }
 
     void Start()
     {
         SetCurrentScore(currentScore);
+        SetCurrentMatches(currentMatches);
+        SetCurrentTries(currentTries);
         bool foundLayoutFromLastGame = false;
         if (ongoingGameState.layoutState.isSolved == false)
         {
@@ -119,6 +128,8 @@ public class GameManager : MonoBehaviour
                 {
                     ongoingLayoutSO = x;
                     SetCurrentScore(ongoingGameState.layoutState.score);
+                    SetCurrentMatches(ongoingGameState.layoutState.matches);
+                    SetCurrentTries(ongoingGameState.layoutState.tries);
                     foundLayoutFromLastGame = true;
                     break;
                 }
@@ -214,14 +225,14 @@ public class GameManager : MonoBehaviour
                         {
                             if (index >= ongoingGameState.layoutState.cardsState.Count)
                             {
-                                // Debug.LogError("index bounds layout saved state for index " + index + " name " + y.CardSprite.name);
+                                DebugLog("index bounds layout saved state for index " + index + " name " + y.CardSprite.name);
                                 return false;
                             }
                             else
                             {
                                 if (y.CardSprite.name != ongoingGameState.layoutState.cardsState[index].spriteName)
                                 {
-                                    // Debug.LogError("incorrect layout saved state for index " + index + " name " + y.CardSprite.name);
+                                    DebugLog("incorrect layout saved state for index " + index + " name " + y.CardSprite.name);
                                     return false;
                                 }
                             }
@@ -246,7 +257,7 @@ public class GameManager : MonoBehaviour
     {
         if (clickedSequenceOfCards.Contains(c))
         {
-            Debug.LogError(c.transform.name + " already in clickedSequenceOfCards");
+            DebugLog(c.transform.name + " already in clickedSequenceOfCards");
             return;
         }
         SFXManager.instance.PlaySFX(SFXManager.GameplaySFXType.CardOpen);
@@ -273,8 +284,10 @@ public class GameManager : MonoBehaviour
 
         if (tempCorrectCardsSequence.Count == ongoingLayoutSO.NumOfCopiesInGrid)
         {
+            SetCurrentMatches(currentMatches + 1);
+            SetCurrentTries(currentTries + 1);
             AddToCurrentScore(ongoingStreak * ongoingLayoutSO.ScorePerCard * tempCorrectCardsSequence.Count);
-            c.CallEscapedTheGrid(tempCorrectCardsSequence,ongoingStreak * ongoingLayoutSO.ScorePerCard);
+            c.CallEscapedTheGrid(tempCorrectCardsSequence, ongoingStreak * ongoingLayoutSO.ScorePerCard);
             clickedSequenceOfCards.Clear();
             ongoingStreak++;
         }
@@ -291,6 +304,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            SetCurrentTries(currentTries + 1);
             ongoingStreak = 1;
             List<Card> incorrectCardsSequence = new List<Card>(clickedSequenceOfCards);
             c.HideASAP(incorrectCardsSequence);
@@ -354,6 +368,8 @@ public class GameManager : MonoBehaviour
         }
 
         ongoingGameState.layoutState.score = currentScore;
+        ongoingGameState.layoutState.matches = currentMatches;
+        ongoingGameState.layoutState.tries = currentTries;
         ongoingGameState.layoutState.cardsState = new List<GameState.CardState>();
         foreach (var x in layoutSpawner.InsLayoutHorizontals)
         {
@@ -401,12 +417,12 @@ public class GameManager : MonoBehaviour
             }
 
             file.Close();
-            Debug.Log(" InitSpinSavedData loaded!");
+            DebugLog(" InitSpinSavedData loaded!");
             return data.Clone();
         }
         else
         {
-            Debug.LogError("There is no saved InitSpinSavedData data!");
+            DebugLog("There is no saved InitSpinSavedData data!");
             return new GameState();
         }
     }
@@ -416,6 +432,8 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         SetCurrentScore(0);
+        SetCurrentMatches(0);
+        SetCurrentTries(0);
         LoadRandomLayout();
         SaveGameState(true);
         Spawn();
@@ -473,5 +491,26 @@ public class GameManager : MonoBehaviour
     {
         currentScore = score;
         GameEvents.UpdatedCurrentScore(currentScore);
+    }
+
+    void SetCurrentMatches(int matches)
+    {
+        currentMatches = matches;
+        GameEvents.UpdatedCurrentMatches(currentMatches);
+    }
+
+    void SetCurrentTries(int tries)
+    {
+        currentTries = tries;
+        GameEvents.UpdatedCurrentTries(currentTries);
+    }
+
+    void DebugLog(string s)
+    {
+        bool shouldLog = false;
+        if (shouldLog)
+        {
+            Debug.Log(s);
+        }
     }
 }
