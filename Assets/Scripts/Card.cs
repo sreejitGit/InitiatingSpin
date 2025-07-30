@@ -62,7 +62,7 @@ public class Card : MonoBehaviour
         else
         {
             Hide(0f);
-            StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, 0.25f));
+            StartCoroutine(PlayWelcomeAnimation());
         }
     }
 
@@ -125,6 +125,34 @@ public class Card : MonoBehaviour
         }
     }
 
+    IEnumerator PlayWelcomeAnimation(float duration = 0.125f,float bounceScale = 1.2f)
+    {
+        float time = 0f;
+
+        Vector3 initialScale = transform.localScale;
+        Vector3 overshootScale = initialScale * bounceScale;
+
+        StartCoroutine(Utils.FadeCanvas(canvasGroup, 0f, 1f, duration));
+        yield return new WaitForSeconds(duration * 0.25f);
+        while (time < duration)
+        {
+            float t = time / duration;
+            transform.localScale = Vector3.Lerp(initialScale, overshootScale, t);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        time = 0f;
+        while (time < 0.1f)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, initialScale, time / 0.1f);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = initialScale;
+    }
+
     IEnumerator flippingAnim;
     private IEnumerator FlipToShowRoutine(float duration)
     {
@@ -161,10 +189,11 @@ public class Card : MonoBehaviour
         if (halfTime > 0f)
         {
              yield return Utils.BounceDownEffect(shownObj.transform, Vector2.one);
-        }   
+        }
 
-       if (hideOnCorrectCardsSequence.Count > 0)
+        if (hideOnCorrectCardsSequence.Count > 0)
         {
+            SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.CorrectMatch);
             foreach (var x in hideOnCorrectCardsSequence)
             {
                 x.EscapedTheGrid();
@@ -177,6 +206,10 @@ public class Card : MonoBehaviour
         }
         else if (hideOnIncorrectCardsSequence.Count > 0)
         {
+            this.DelayExecute(() =>
+            { 
+                SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.IncorrectMatch);
+            }, 0.5f);
             foreach (var x in hideOnIncorrectCardsSequence)
             {
                 x.ToggleAllowClick(true);
@@ -222,6 +255,7 @@ public class Card : MonoBehaviour
             if (halfTime > 0f)
             {
                 yield return Utils.BounceUpEffect(shownObj.transform, shownObj.transform.localScale);
+                SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.CardClose);
                 yield return Utils.RotateSlerp(shownObj.transform, startRotation, endRotation, halfTime);
             }   
             shownObj.transform.rotation = endRotation;

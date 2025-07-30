@@ -38,11 +38,12 @@ public class LayoutHorizontal : MonoBehaviour
         }
     }
 
-    public void InitUI()
+    public IEnumerator InitUI()
     {
         foreach (var x in insCards)
         {
             x.InitUI();
+            yield return new WaitForSeconds(0.025f);
         }
         foreach (var x in emptyCards)
         {

@@ -19,9 +19,9 @@ public static class Utils
         }
     }
 
-    public static Coroutine Execute(this MonoBehaviour monoBehaviour, Action action, float time)
+    public static Coroutine DelayExecute(this MonoBehaviour monoBehaviour, Action action, float delayTime)
     {
-        return monoBehaviour.StartCoroutine(DelayedAction(monoBehaviour, action, time));
+        return monoBehaviour.StartCoroutine(DelayedAction(monoBehaviour, action, delayTime));
     }
 
     private static IEnumerator DelayedAction(MonoBehaviour monoBehaviour, Action action, float time)

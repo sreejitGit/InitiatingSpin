@@ -28,12 +28,12 @@ public class LayoutSpawner : MonoBehaviour
             newHori.SpawnCards(j, layoutSO.layoutData.horizontalLayoutDatas[j]);
         }
         yield return new WaitForEndOfFrame();
+        SFXManager.instance.PlaySFXOnce(SFXManager.GameplaySFXType.LayoutOpen);
         foreach (var x in insLayoutHorizontals)
         {
-            x.InitUI();
-            yield return new WaitForFixedUpdate();
+            yield return x.InitUI();
         }
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForSeconds(0.125f);
         GameEvents.LayoutSetupDone();
     }
 
